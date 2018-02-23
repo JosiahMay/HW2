@@ -1,5 +1,9 @@
 package cs455.scaling.util;
 
-abstract class ArgsReturned {
+
+/**
+ * Interface for all args returned after parsing
+ */
+interface ArgsReturned {
 
 }

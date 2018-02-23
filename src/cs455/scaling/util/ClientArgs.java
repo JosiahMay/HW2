@@ -3,7 +3,7 @@ package cs455.scaling.util;
 /**
  * Wrapper class for the args for a client
  */
-public class ClientArgs extends ArgsReturned{
+public class ClientArgs implements ArgsReturned {
 
   /**
    * The IP address of the server

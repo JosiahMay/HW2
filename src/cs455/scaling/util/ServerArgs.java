@@ -3,7 +3,7 @@ package cs455.scaling.util;
 /**
  * Wrapper class for the args for starting a server
  */
-public class ServerArgs extends ArgsReturned {
+public class ServerArgs implements ArgsReturned {
 
   /**
    * The port number you want your server to run on
