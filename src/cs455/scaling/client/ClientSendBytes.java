@@ -55,6 +55,7 @@ public class ClientSendBytes extends Thread{
       } catch (IOException e) {
         System.err.println("Error when sending bytes to server");
         if(ProjectProperties.DEBUG) {e.printStackTrace();}
+        controller.interrupt();
         break;
       }
 

@@ -1,7 +1,6 @@
 package cs455.scaling.client;
 
 import cs455.scaling.util.ProjectProperties;
-import cs455.scaling.util.RandomByteAndHashCode;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
