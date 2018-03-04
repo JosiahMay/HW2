@@ -8,6 +8,7 @@ import cs455.scaling.util.CommandLineParser.Program;
 public class Client {
 
 
+
   public static void main(String[] args) {
 
     ClientArgs clientArgs = (ClientArgs) CommandLineParser.verifyArgs(args, Program.Server);
@@ -19,7 +20,13 @@ public class Client {
     System.out.println("Server: " + clientArgs.hostIpAddress + ":"
         + clientArgs.hostPortNumber + "\nMessage Rate: "  + clientArgs.messageRate);
 
+    ClientConnectionController controller =
+        new ClientConnectionController(
+            clientArgs.hostIpAddress,
+            clientArgs.hostPortNumber,
+            clientArgs.messageRate);
 
+    controller.start();
   }
 
 }

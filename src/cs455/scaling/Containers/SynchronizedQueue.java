@@ -1,4 +1,4 @@
-package cs455.scaling.util;
+package cs455.scaling.Containers;
 
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
