@@ -1,30 +1,23 @@
-package cs455.Threads;
+package cs455.scaling.Threads;
 
-import cs455.Tasks.ExtendTaskTest;
+import cs455.scaling.Tasks.ExtendTaskTest;
+import cs455.scaling.Tasks.FloodPoolTask;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ThreadTester {
 
   private void run(){
-    ArrayList<TestThread> threads = new ArrayList<>();
-
-    for (int i = 0; i < 10; i++) {
-      TestThread thread = new TestThread("Thread: " + i);
-      thread.start();
-      threads.add(thread);
-    }
-
-    System.out.println("finished threads");
 
 
+    ThreadPoolController controller = new ThreadPoolController(10);
+
+    controller.setupThreadPool();
+    controller.addTask(new FloodPoolTask(controller));
+    controller.startController();
 
     try {
-      synchronized (this) {
-        sendMessages(threads);
-        wait(100);
-        stopThreads(threads);
-      }
+      Thread.sleep(1000);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
@@ -41,7 +34,7 @@ public class ThreadTester {
     for (int i = 0; i < 1000; i++) {
       TestThread thread = threads.get(ThreadLocalRandom.current().nextInt(threads.size()));
       thread.startTask(new ExtendTaskTest(thread.getName() + " issued message " + i));
-      wait(10);
+      Thread.sleep(10);
     }
   }
 

@@ -1,12 +1,12 @@
-package cs455.Threads;
+package cs455.scaling.Threads;
 
-import cs455.Tasks.Task;
+import cs455.scaling.Tasks.Task;
 
 public class TestThread extends Thread {
 
   private Task message;
 
-  TestThread(String s) {
+  public TestThread(String s) {
     super(s);
   }
 

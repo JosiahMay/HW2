@@ -1,6 +1,7 @@
-package cs455.Threads;
+package cs455.scaling.Threads;
 
-import cs455.Tasks.Task;
+import cs455.scaling.Tasks.Task;
+import cs455.scaling.util.ProjectProperties;
 
 /**
  * A worker thread the receives a task from the thread pool and runs the tasks. When the thread has
@@ -44,39 +45,34 @@ public class WorkerThreads extends Thread{
     while(!Thread.currentThread().isInterrupted()){
       try {
         checkForWork();
-
+        if(ProjectProperties.DEBUG){
+          System.out.println(Thread.currentThread().getName() + " starting task");
+        }
         task.startTask();
-
         taskFinished();
-
       } catch (InterruptedException e) {
-        break;
-      } finally {
         System.out.println(Thread.currentThread().getName() + " stopping");
       }
-
     }
-
   }
 
   /**
    * Clears the current task and puts the thread back into the thread pool
    */
-  private void taskFinished() {
+  private synchronized void taskFinished() {
     task = null;
     controller.returnThreadToPool(this);
+    //System.out.println(Thread.currentThread().getName() + " finished task");
   }
 
   /**
    * Checks if their is a task and waits if there is no task
    * @throws InterruptedException Thread Interrupted while waiting
    */
-  private void checkForWork() throws InterruptedException {
-    synchronized (taskLock){
-      while (task == null){
+  private synchronized void checkForWork() throws InterruptedException {
+      while (task == null) {
         this.wait();
       }
-    }
   }
 
   /**
@@ -91,6 +87,7 @@ public class WorkerThreads extends Thread{
         throw new IllegalStateException(this.getName() + ": trying to start "
             + "task when thread already assigned a task");
       }
+
       this.task = task;
       this.notify();
       return true;
