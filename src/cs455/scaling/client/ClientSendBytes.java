@@ -46,23 +46,31 @@ public class ClientSendBytes extends Thread{
       // Make random bytes
       byte[] bytes = getRandomBytes();
       ByteBuffer buffer = ByteBuffer.wrap(bytes);
-      if(ProjectProperties.DEBUG) {
-        System.out.println("Sending out: " + RandomByteAndHashCode.SHA1FromBytes(bytes));
-      }
+      printBytesSent(bytes);
 
-        controller.sendMessage(bytes); // add to sent message list
+      controller.sendMessage(bytes); // add to sent message list
         channel.write(buffer); // send message
         Thread.sleep(1000/messageRate);//Sleep for the required time
 
       }
 
     }catch (IOException e) {
-      System.err.println("Error when sending bytes to server");
-      if(ProjectProperties.DEBUG) {e.printStackTrace();}
-      controller.interrupt();
+      errorWhenSendingBytes(e);
     } catch (InterruptedException e) {
       System.out.println("Client message sender ending");
     }
+  }
+
+  private void printBytesSent(byte[] bytes) {
+    if(ProjectProperties.DEBUG) {
+      System.out.println("Sending out: " + RandomByteAndHashCode.SHA1FromBytes(bytes));
+    }
+  }
+
+  private void errorWhenSendingBytes(IOException e) {
+    System.err.println("Error when sending bytes to server");
+    if(ProjectProperties.DEBUG) {e.printStackTrace();}
+    controller.interrupt();
   }
 
 
