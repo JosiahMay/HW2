@@ -21,7 +21,7 @@ public class ClientReadBytes extends Thread {
    * @param controller The controller of this thread
    * @param channel The channel to read messages from
    */
-  public ClientReadBytes(ClientConnectionController controller, SocketChannel channel){
+  ClientReadBytes(ClientConnectionController controller, SocketChannel channel){
     this.controller = controller;
     this.channel = channel;
   }
@@ -33,7 +33,7 @@ public class ClientReadBytes extends Thread {
 
 
       try {
-        ByteBuffer buffer = ByteBuffer.allocate(ProjectProperties.BUFFER_SIZE); // setup buffer
+        ByteBuffer buffer = ByteBuffer.allocate(ProjectProperties.STRING_BUFFER_SIZE); // setup buffer
         int read = 0; // check if the channel has closed
         //Read message
         while (buffer.hasRemaining() && read != -1) {

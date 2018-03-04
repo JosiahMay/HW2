@@ -19,6 +19,12 @@ public class Client {
     System.out.println("Server: " + clientArgs.hostIpAddress + ":"
         + clientArgs.hostPortNumber + "\nMessage Rate: "  + clientArgs.messageRate);
 
+    ClientConnectionController controller =
+        new ClientConnectionController(
+            clientArgs.hostIpAddress,
+            clientArgs.hostPortNumber,
+            clientArgs.messageRate);
+
 
   }
 

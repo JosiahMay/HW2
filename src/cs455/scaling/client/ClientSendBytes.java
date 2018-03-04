@@ -42,30 +42,43 @@ public class ClientSendBytes extends Thread{
 
     while(!Thread.currentThread().isInterrupted()){
       // Make random bytes
-      byte[] bytes = RandomByteAndHashCode.randomBytes();
+      byte[] bytes = getRandomBytes();
       ByteBuffer buffer = ByteBuffer.wrap(bytes);
-
+      if(ProjectProperties.DEBUG) {
+        System.out.println("Sending out: " + RandomByteAndHashCode.SHA1FromBytes(bytes));
+      }
       try {
-        if(ProjectProperties.DEBUG) {
-          System.out.println("Sending out: " + RandomByteAndHashCode.SHA1FromBytes(bytes));
-        }
-
-        channel.write(buffer); // send message
         controller.sendMessage(bytes); // add to sent message list
+        channel.write(buffer); // send message
+        Thread.sleep(1000/messageRate);//Sleep for the required time
+
       } catch (IOException e) {
         System.err.println("Error when sending bytes to server");
         if(ProjectProperties.DEBUG) {e.printStackTrace();}
         controller.interrupt();
         break;
-      }
-
-      try {
-        //Sleep for the required time
-        Thread.sleep(1000/messageRate);
       } catch (InterruptedException e) {
         System.out.println("Client message sender ending");
+        break;
       }
+
     }
   }
+
+
+  /**
+   * Returns a random byte[] of that when hashed will return a size 40 length string
+   *
+   * @return the random bytes
+   */
+  private byte[] getRandomBytes() {
+    byte[] bytes = RandomByteAndHashCode.randomBytes();
+    // Check if string will be 40 in length
+    while(RandomByteAndHashCode.SHA1FromBytes(bytes).length() != 40){
+      bytes = RandomByteAndHashCode.randomBytes();
+    }
+    return bytes;
+  }
+
 
 }
