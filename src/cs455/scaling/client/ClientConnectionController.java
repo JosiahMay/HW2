@@ -33,7 +33,7 @@ public class ClientConnectionController extends Thread {
     try {
       channel = setupConnection();
     } catch (IOException e) {
-      System.err.println("Could not connect to server");
+      System.err.println("Could not connect to server " + hostAddress + ":" + hostPort);
       if (ProjectProperties.DEBUG) {
         e.printStackTrace();
       }

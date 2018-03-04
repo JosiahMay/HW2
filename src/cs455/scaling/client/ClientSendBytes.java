@@ -40,6 +40,8 @@ public class ClientSendBytes extends Thread{
   @Override
   public void run(){
 
+
+    try {
     while(!Thread.currentThread().isInterrupted()){
       // Make random bytes
       byte[] bytes = getRandomBytes();
@@ -47,21 +49,19 @@ public class ClientSendBytes extends Thread{
       if(ProjectProperties.DEBUG) {
         System.out.println("Sending out: " + RandomByteAndHashCode.SHA1FromBytes(bytes));
       }
-      try {
+
         controller.sendMessage(bytes); // add to sent message list
         channel.write(buffer); // send message
         Thread.sleep(1000/messageRate);//Sleep for the required time
 
-      } catch (IOException e) {
-        System.err.println("Error when sending bytes to server");
-        if(ProjectProperties.DEBUG) {e.printStackTrace();}
-        controller.interrupt();
-        break;
-      } catch (InterruptedException e) {
-        System.out.println("Client message sender ending");
-        break;
       }
 
+    }catch (IOException e) {
+      System.err.println("Error when sending bytes to server");
+      if(ProjectProperties.DEBUG) {e.printStackTrace();}
+      controller.interrupt();
+    } catch (InterruptedException e) {
+      System.out.println("Client message sender ending");
     }
   }
 
