@@ -28,43 +28,50 @@ public class ClientReadBytes extends Thread {
 
   @Override
   public void run() {
+    try {
+      while (!Thread.currentThread().isInterrupted()) {
 
-    while (!Thread.currentThread().isInterrupted()) {
-
-
-      try {
         ByteBuffer buffer = ByteBuffer.allocate(ProjectProperties.STRING_BUFFER_SIZE); // setup buffer
-        int read = 0; // check if the channel has closed
-        //Read message
-        while (buffer.hasRemaining() && read != -1) {
-          read = channel.read(buffer);
-        }
-        // Stop the client if channel has closed
-        if (read == -1) {
-          channel.close();
-          errorEncountered("Connection closed on server side");
+        if (readMessage(buffer)) {
           break;
         }
         // Convert bytes into String
-        String bytesRead = new String(buffer.array());
-        if (ProjectProperties.DEBUG) {
-          System.out.println("Client read: " + bytesRead);
-        }
+        String bytesRead = getBytesHexString(buffer);
 
         // Sends the returned string to the controller
         controller.receivedMessage(bytesRead);
-
-      } catch (IOException e) {
-
-        errorEncountered("Error when reading bytes from server");
-        if(ProjectProperties.DEBUG) {e.printStackTrace();}
-        break;
       }
 
 
+    }catch (IOException e) {
+      errorEncountered("Error when reading bytes from server");
+      if(ProjectProperties.DEBUG) {e.printStackTrace();}
     }
 
     System.out.println("Client read thread closing down");
+  }
+
+  private boolean readMessage(ByteBuffer buffer) throws IOException {
+    int read = 0; // check if the channel has closed
+    //Read message
+    while (buffer.hasRemaining() && read != -1) {
+      read = channel.read(buffer);
+    }
+    // Stop the client if channel has closed
+    if (read == -1) {
+      channel.close();
+      errorEncountered("Connection closed on server side");
+      return true;
+    }
+    return false;
+  }
+
+  private String getBytesHexString(ByteBuffer buffer) {
+    String bytesRead = new String(buffer.array());
+    if (ProjectProperties.DEBUG) {
+      System.out.println("Client read: " + bytesRead);
+    }
+    return bytesRead;
   }
 
 
