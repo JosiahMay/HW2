@@ -3,6 +3,7 @@ package cs455.scaling.server;
 import cs455.scaling.util.ProjectProperties;
 import cs455.scaling.util.RandomByteAndHashCode;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -92,12 +93,15 @@ public class ServerThreadTest extends Thread{
 
   @Override
   public void run(){
-    System.out.println("Starting ServerThreadTest");
+
     try {
+      String serverAddress = InetAddress.getLocalHost().getHostAddress();
       selector = Selector.open();
       ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
       serverSocketChannel.configureBlocking(false);
-      serverSocketChannel.socket().bind(new InetSocketAddress(serverHost, serverPort));
+      serverSocketChannel.socket().bind(new InetSocketAddress(serverAddress, serverPort));
+      System.out.println("Starting ServerThreadTest");
+      System.out.println(serverAddress + ":" + serverPort);
       serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
       while (true) {
 // wait for events
@@ -114,6 +118,7 @@ public class ServerThreadTest extends Thread{
           }
 /*other cases such as isReadable() and isWriteable() not shown*/
           if(key.isReadable()){
+            key.interestOps(SelectionKey.OP_WRITE);
             this.read(key);
           }
         }

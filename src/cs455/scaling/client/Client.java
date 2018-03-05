@@ -11,7 +11,7 @@ public class Client {
 
   public static void main(String[] args) {
 
-    ClientArgs clientArgs = (ClientArgs) CommandLineParser.verifyArgs(args, Program.Server);
+    ClientArgs clientArgs = (ClientArgs) CommandLineParser.verifyArgs(args, Program.Client);
 
 
     if(clientArgs == null){

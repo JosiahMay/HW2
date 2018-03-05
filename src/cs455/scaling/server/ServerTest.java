@@ -1,9 +1,19 @@
 package cs455.scaling.server;
 
+import cs455.scaling.Threads.ThreadPoolController;
+
 public class ServerTest {
 
   public void run(){
-    ServerThreadTest server = new ServerThreadTest();
+
+    ThreadPoolController threadPool = new ThreadPoolController(10);
+    threadPool.setupThreadPool();
+    threadPool.start();
+
+    ServerStatisticsThread stats = new ServerStatisticsThread();
+    stats.start();
+
+    NIOServer server = new NIOServer(12345,threadPool, stats);
 
     server.start();
 

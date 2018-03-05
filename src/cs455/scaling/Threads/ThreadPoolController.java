@@ -10,7 +10,7 @@ import cs455.scaling.Containers.SynchronizedQueue;
  * the thread pool. After this call ThreadPoolController.startController() to start processing
  * events. This should be its own thread but this in not allowed by the assignment
  */
-public class ThreadPoolController {
+public class ThreadPoolController extends Thread{
 
   /**
    * Lock for the thread pool
@@ -70,7 +70,8 @@ public class ThreadPoolController {
    * Starts the controller logic this should be its own thread but not for this assignment
    * @throws IllegalStateException Attempting to start controller without setting up the thread pool
    */
-  public void startController() throws IllegalStateException{
+  @Override
+  public void run() throws IllegalStateException{
     if(!threadPoolSetup){
       throw new IllegalStateException("The thread pool is not set up");
     }

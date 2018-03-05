@@ -48,7 +48,7 @@ public class WorkerThreads extends Thread{
         if(ProjectProperties.DEBUG){
           System.out.println(Thread.currentThread().getName() + " starting task");
         }
-        task.startTask();
+        task.run();
         taskFinished();
       } catch (InterruptedException e) {
         System.out.println(Thread.currentThread().getName() + " stopping");
