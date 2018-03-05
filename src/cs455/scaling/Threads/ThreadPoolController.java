@@ -113,7 +113,7 @@ public class ThreadPoolController extends Thread{
    * @param task Task to for worker thread to run
    * @throws InterruptedException Thread interrupted while waiting
    */
-  private synchronized void assignTask(Task task) throws InterruptedException {
+  private void assignTask(Task task) throws InterruptedException {
     synchronized (threadPoolLock){
       // Wait for available worker thread
       while(threadPool.size() == 0){
@@ -145,7 +145,7 @@ public class ThreadPoolController extends Thread{
    * waiting for free worker threads
    * @param workerThreads Thread to add back to the pool
    */
-  public synchronized void returnThreadToPool(WorkerThreads workerThreads) {
+  synchronized void returnThreadToPool(WorkerThreads workerThreads) {
     threadPool.add(workerThreads);
     this.notify(); // Wake up waiting threads
   }

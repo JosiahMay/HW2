@@ -1,5 +1,5 @@
 CLASSES=/s/bach/k/under/josiahm/CS455/HW2/src/
-SCRIPT="cd $CLASSES; java cs455.scaling.client.Client jupiter 9856 4;bash;"
+SCRIPT="cd $CLASSES; java cs455.scaling.client.Client jupiter 9856 5;bash;"
 #$1 is the command-line argument
 for ((j=1; j<=$1;j++));
   do
