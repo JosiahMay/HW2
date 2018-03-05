@@ -9,7 +9,7 @@ import cs455.scaling.util.ServerArgs;
 /**
  * Driver for the server
  */
-public class Server {
+class Server {
 
 
   /**

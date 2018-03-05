@@ -24,10 +24,8 @@ public class Task implements Runnable{
   @Override
   public void run() {
     try {
-      if(read())
-      {
-        stats.addToCount(key);
-      }
+      read();
+      stats.addToCount(key);
     } catch (IOException e) {
       closeAndCancel();
     }
@@ -35,6 +33,7 @@ public class Task implements Runnable{
 
   private void closeAndCancel() {
     try {
+      stats.removeKey(key);
       key.cancel();
       channel.close();
     } catch (IOException e) {
@@ -44,36 +43,44 @@ public class Task implements Runnable{
 
   private void write( byte[] data) throws IOException {
     ByteBuffer buffer = ByteBuffer.wrap(data);
-    channel.write(buffer);
+    int write = 0;
+    while(buffer.hasRemaining() && write != -1)
+    {
+      write = channel.write(buffer);
+    }
+
+    checkIfClosed(write);
+
     if(ProjectProperties.DEBUG_FULL){
       System.out.println("Data size: " + data.length);
     }
 
     key.interestOps(SelectionKey.OP_READ);
 
+
   }
 
-  private boolean read() throws IOException {
+  private void read() throws IOException {
     ByteBuffer buffer = ByteBuffer.allocate(ProjectProperties.BYTE_BUFFER_SIZE);
     int read = 0;
     while (buffer.hasRemaining() && read != -1) {
       read = channel.read(buffer);
     }
-    if (read == -1) {
-      stats.removeKey(key);
-      /* Connection was terminated by the client. */
-      closeAndCancel();
-      return false;
-    }
+    checkIfClosed(read);
+
 
     String rt = RandomByteAndHashCode.SHA1FromBytes(buffer.array());
     if(ProjectProperties.DEBUG_FULL){
       System.out.println("Read: " + rt );
     }
-    write(rt.getBytes());
 
-    return true;
+    write(rt.getBytes());
   }
 
 
+  private void checkIfClosed(int i) throws IOException {
+    if (i == -1) {
+      throw new IOException();
+    }
+  }
 }

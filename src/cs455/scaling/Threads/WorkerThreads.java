@@ -8,7 +8,7 @@ import cs455.scaling.util.ProjectProperties;
  * no task to run, it waits.
  *
  */
-public class WorkerThreads extends Thread{
+class WorkerThreads extends Thread{
 
   /**
    * Lock to make sure the task is not changed by multiple threads

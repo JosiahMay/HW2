@@ -9,7 +9,7 @@ import java.nio.channels.SocketChannel;
 /**
  * Sends a random byte[] to a server at a given message rate
  */
-public class ClientSendBytes extends Thread{
+class ClientSendBytes extends Thread{
 
   /**
    * The sleep time between sending messages it is 1000/messageRate in milliseconds
@@ -48,8 +48,9 @@ public class ClientSendBytes extends Thread{
       printBytesSent(bytes);
 
       controller.sentMessage(bytes); // add to sent message list
-        channel.write(buffer); // send message
-        Thread.sleep(1000/messageRate);//Sleep for the required time
+      writeBytes(buffer);
+      //channel.write(buffer); // send message
+      Thread.sleep(1000/messageRate);//Sleep for the required time
 
       }
 
@@ -57,6 +58,17 @@ public class ClientSendBytes extends Thread{
       errorWhenSendingBytes(e);
     } catch (InterruptedException e) {
       System.out.println("Client message sender ending");
+    }
+  }
+
+  private void writeBytes(ByteBuffer buffer) throws IOException {
+    int write = 0;
+    while(buffer.hasRemaining() && write != -1)
+    {
+      write = channel.write(buffer);
+    }
+    if(write == -1){
+      throw new IOException();
     }
   }
 

@@ -13,7 +13,7 @@ import java.nio.channels.SocketChannel;
 /**
  * Connects to the server and starts up the sender and receiver threads for the client
  */
-public class ClientConnectionController extends Thread {
+class ClientConnectionController extends Thread {
 
   /**
    * The server IP address
@@ -31,10 +31,6 @@ public class ClientConnectionController extends Thread {
    * A list of all the hex codes of all the bytes sent
    */
   private final SynchronizedSet<String> bytesSent;
-  /**
-   * The channel connected to the server
-   */
-  private SocketChannel channel;
   /**
    * The stats collector for the client
    */
@@ -58,8 +54,13 @@ public class ClientConnectionController extends Thread {
   @Override
   public void run() {
     // Setup connection to server
+    /*
+    The channel connected to the server
+   */
+    SocketChannel channel;
     try {
       channel = setupConnection();
+
     } catch (IOException e) {
       // Could not connect
       System.err.println("Could not connect to server " + hostAddress + ":" + hostPort);
@@ -80,6 +81,12 @@ public class ClientConnectionController extends Thread {
     while (!Thread.currentThread().isInterrupted()) {
       // Wait around
     }
+
+    sender.interrupt();
+    reader.interrupt();
+    stats.interrupt();
+    System.exit(0);
+
   }
 
   /**

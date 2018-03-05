@@ -1,4 +1,4 @@
-for i in `cat machine_list`
+for i in `cat machine_list_all`
 do
   ssh $i "killall -u $USER java"
 done

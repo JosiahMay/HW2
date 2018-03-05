@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-public class ClientReadBytes extends Thread {
+class ClientReadBytes extends Thread {
 
   /**
    * The controller of this thread

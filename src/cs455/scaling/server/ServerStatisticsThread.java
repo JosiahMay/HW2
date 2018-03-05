@@ -145,7 +145,7 @@ public class ServerStatisticsThread extends Thread{
    */
   public synchronized void removeKey(SelectionKey key)
   {
-    Integer results = stats.remove(key);
+    stats.remove(key);
   }
 
 }

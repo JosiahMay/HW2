@@ -3,11 +3,9 @@ package cs455.scaling.server;
 import cs455.scaling.Tasks.Task;
 import cs455.scaling.Threads.ThreadPoolController;
 import cs455.scaling.util.ProjectProperties;
-import cs455.scaling.util.RandomByteAndHashCode;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -18,7 +16,7 @@ import java.util.Iterator;
 /**
  * Server that handles the accepting connection and creating tasks
  */
-public class NIOServer extends Thread {
+class NIOServer extends Thread {
 
   /**
    * The selector for handling keys
@@ -60,7 +58,7 @@ public class NIOServer extends Thread {
     ServerSocketChannel serverSocket = (ServerSocketChannel) key.channel();
     SocketChannel channel = serverSocket.accept();
 
-    if(ProjectProperties.DEBUG_FULL) {
+    if(ProjectProperties.DEBUG_HEX_NOT_FOUND) {
       System.out.println("Accepting incoming connection ");
     }
 
@@ -113,7 +111,10 @@ public class NIOServer extends Thread {
       }
     } catch (CancelledKeyException e){
       // If key gets canceled it means the client has disconnected
-      System.err.println("A client has disconnected");
+      if(ProjectProperties.DEBUG_HEX_NOT_FOUND){
+        System.err.println("A client has disconnected");
+      }
+
 
     }
 
