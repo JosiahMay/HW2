@@ -54,7 +54,7 @@ public class ClientConnectionController extends Thread {
 
 
 
-  public void sendMessage(byte[] bytes) {
+  void sendMessage(byte[] bytes) {
     String hexOfBytes = RandomByteAndHashCode.SHA1FromBytes(bytes);
 
     if(ProjectProperties.DEBUG){
@@ -69,13 +69,18 @@ public class ClientConnectionController extends Thread {
 
   }
 
-  public void receivedMessage(String bytesRead) {
+  void receivedMessage(String bytesRead) {
     if(bytesSent.remove(bytesRead)){
       stats.messageReceived();
     } else {
       System.err.println("Hex values <" + bytesRead + "> not in list of bytes sent");
-      System.out.println("Stored HEXs");
-      bytesSent.printContents();
+
+      if(ProjectProperties.DEBUG){
+        System.out.println("Stored HEXs: " + bytesSent.size() );
+        bytesSent.printContents();
+        System.exit(1);
+      }
+
     }
   }
 

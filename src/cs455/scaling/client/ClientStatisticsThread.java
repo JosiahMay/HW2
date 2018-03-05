@@ -1,13 +1,14 @@
 package cs455.scaling.client;
 
 
+import cs455.scaling.util.ProjectProperties;
+
 /**
  * Prints out the count of messages sent and received by a client every 20 seconds. This count
  * is reset after every print.
  */
 public class ClientStatisticsThread extends Thread{
 
-  private final int WAIT_TIME = 20000;
 
   private int messagesSent;
   private int messagesReceived;
@@ -26,14 +27,18 @@ public class ClientStatisticsThread extends Thread{
     resetStats();
 
     while(!Thread.currentThread().isInterrupted()){
-      printStats();
-      resetStats();
+      runLogic();
       try {
-        Thread.sleep(WAIT_TIME);
+        Thread.sleep(ProjectProperties.STATS_WAIT_TIME_MILLISECONDS);
       } catch (InterruptedException e) {
         System.out.println("Statistics finished");
       }
     }
+  }
+
+  private synchronized void runLogic() {
+    printStats();
+    resetStats();
   }
 
 
