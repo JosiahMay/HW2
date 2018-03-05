@@ -45,7 +45,7 @@ public class Task implements Runnable{
   private void write( byte[] data) throws IOException {
     ByteBuffer buffer = ByteBuffer.wrap(data);
     channel.write(buffer);
-    if(ProjectProperties.DEBUG){
+    if(ProjectProperties.DEBUG_FULL){
       System.out.println("Data size: " + data.length);
     }
 
@@ -67,7 +67,7 @@ public class Task implements Runnable{
     }
 
     String rt = RandomByteAndHashCode.SHA1FromBytes(buffer.array());
-    if(ProjectProperties.DEBUG){
+    if(ProjectProperties.DEBUG_FULL){
       System.out.println("Read: " + rt );
     }
     write(rt.getBytes());

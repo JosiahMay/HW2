@@ -33,7 +33,9 @@ public class NIOServer extends Thread {
   private void accept(SelectionKey key) throws IOException {
     ServerSocketChannel servSocket = (ServerSocketChannel) key.channel();
     SocketChannel channel = servSocket.accept();
-    System.out.println("Accepting incoming connection ");
+    if(ProjectProperties.DEBUG_FULL) {
+      System.out.println("Accepting incoming connection ");
+    }
     channel.configureBlocking(false);
     channel.register(selector, SelectionKey.OP_READ);
   }

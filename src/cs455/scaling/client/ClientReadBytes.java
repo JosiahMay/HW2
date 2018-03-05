@@ -45,7 +45,7 @@ public class ClientReadBytes extends Thread {
 
     }catch (IOException e) {
       errorEncountered("Error when reading bytes from server");
-      if(ProjectProperties.DEBUG) {e.printStackTrace();}
+      if(ProjectProperties.DEBUG_FULL) {e.printStackTrace();}
     }
 
     System.out.println("Client read thread closing down");
@@ -68,7 +68,7 @@ public class ClientReadBytes extends Thread {
 
   private String getBytesHexString(ByteBuffer buffer) {
     String bytesRead = new String(buffer.array());
-    if (ProjectProperties.DEBUG) {
+    if (ProjectProperties.DEBUG_FULL) {
       System.out.println("Client read: " + bytesRead);
     }
     return bytesRead;

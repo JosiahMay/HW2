@@ -34,7 +34,7 @@ public class ClientConnectionController extends Thread {
       channel = setupConnection();
     } catch (IOException e) {
       System.err.println("Could not connect to server " + hostAddress + ":" + hostPort);
-      if (ProjectProperties.DEBUG) {
+      if (ProjectProperties.DEBUG_FULL) {
         e.printStackTrace();
       }
       return;
@@ -47,7 +47,7 @@ public class ClientConnectionController extends Thread {
     reader.start();
 
     while (!Thread.currentThread().isInterrupted()) {
-
+      // Wait around
     }
   }
 
@@ -57,7 +57,7 @@ public class ClientConnectionController extends Thread {
   void sendMessage(byte[] bytes) {
     String hexOfBytes = RandomByteAndHashCode.SHA1FromBytes(bytes);
 
-    if(ProjectProperties.DEBUG){
+    if(ProjectProperties.DEBUG_FULL){
       System.out.println("Sending bytes with hex code <" + hexOfBytes + "> to server");
     }
 
@@ -75,7 +75,7 @@ public class ClientConnectionController extends Thread {
     } else {
       System.err.println("Hex values <" + bytesRead + "> not in list of bytes sent");
 
-      if(ProjectProperties.DEBUG){
+      if(ProjectProperties.DEBUG_HEX_NOT_FOUND){
         System.out.println("Stored HEXs: " + bytesSent.size() );
         bytesSent.printContents();
         System.exit(1);

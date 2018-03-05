@@ -30,8 +30,7 @@ public class ClientSendBytes extends Thread{
    * @param controller The controller of this thread
    * @param channel The channel to send messages to
    */
-  public ClientSendBytes(int messageRate,
-      ClientConnectionController controller, SocketChannel channel){
+  ClientSendBytes(int messageRate, ClientConnectionController controller, SocketChannel channel){
     this.messageRate = messageRate;
     this.controller = controller;
     this.channel = channel;
@@ -62,14 +61,14 @@ public class ClientSendBytes extends Thread{
   }
 
   private void printBytesSent(byte[] bytes) {
-    if(ProjectProperties.DEBUG) {
+    if(ProjectProperties.DEBUG_FULL) {
       System.out.println("Sending out: " + RandomByteAndHashCode.SHA1FromBytes(bytes));
     }
   }
 
   private void errorWhenSendingBytes(IOException e) {
     System.err.println("Error when sending bytes to server");
-    if(ProjectProperties.DEBUG) {e.printStackTrace();}
+    if(ProjectProperties.DEBUG_FULL) {e.printStackTrace();}
     controller.interrupt();
   }
 
