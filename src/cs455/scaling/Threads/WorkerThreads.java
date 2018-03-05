@@ -30,7 +30,7 @@ public class WorkerThreads extends Thread{
    * @param name Name of the thread
    * @param controller The thread pool
    */
-  public WorkerThreads(String name, ThreadPoolController controller){
+  WorkerThreads(String name, ThreadPoolController controller){
     super(name); // Set name
     this.controller = controller;
     task = null; // Make sure task is set to null
@@ -45,7 +45,7 @@ public class WorkerThreads extends Thread{
     while(!Thread.currentThread().isInterrupted()){
       try {
         checkForWork();
-        if(ProjectProperties.DEBUG){
+        if(ProjectProperties.DEBUG_FULL){
           System.out.println(Thread.currentThread().getName() + " starting task");
         }
         task.run();
@@ -78,10 +78,9 @@ public class WorkerThreads extends Thread{
   /**
    * Gives a the WorkerThread a task an notifies the thread it has work to do
    * @param task The task to complete
-   * @return Was the task set
    * @throws IllegalStateException Trying to set a task to a thread that already has one
    */
-  public synchronized boolean setTask(Task task) throws IllegalStateException{
+  synchronized void setTask(Task task) throws IllegalStateException{
     synchronized (taskLock){
       if(this.task != null){
         throw new IllegalStateException(this.getName() + ": trying to start "
@@ -90,7 +89,6 @@ public class WorkerThreads extends Thread{
 
       this.task = task;
       this.notify();
-      return true;
     }
   }
 

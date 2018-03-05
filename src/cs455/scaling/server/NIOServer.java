@@ -15,14 +15,34 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
+/**
+ * Server that handles the accepting connection and creating tasks
+ */
 public class NIOServer extends Thread {
 
+  /**
+   * The selector for handling keys
+   */
   private Selector selector;
+  /**
+   * The port to start server on
+   */
   private final int serverPort;
-
+  /**
+   * The thread pool for tasks
+   */
   private final ThreadPoolController threadPool;
+  /**
+   * The stats thread
+   */
   private final ServerStatisticsThread serverStats;
 
+  /**
+   * Basic constructor
+   * @param portNumber the port number
+   * @param threadPool the thread pool
+   * @param serverStats the stats thread
+   */
   NIOServer(int portNumber, ThreadPoolController threadPool, ServerStatisticsThread serverStats){
     this.serverPort = portNumber;
     this.threadPool = threadPool;
@@ -30,10 +50,20 @@ public class NIOServer extends Thread {
   }
 
 
+  /**
+   * Accepts a connection and sets the key to read
+   * @param key the key to accept a connection to
+   * @throws IOException error connecting
+   */
   private void accept(SelectionKey key) throws IOException {
-    ServerSocketChannel servSocket = (ServerSocketChannel) key.channel();
-    SocketChannel channel = servSocket.accept();
-    System.out.println("Accepting incoming connection ");
+    // Configure socket
+    ServerSocketChannel serverSocket = (ServerSocketChannel) key.channel();
+    SocketChannel channel = serverSocket.accept();
+
+    if(ProjectProperties.DEBUG_FULL) {
+      System.out.println("Accepting incoming connection ");
+    }
+
     channel.configureBlocking(false);
     channel.register(selector, SelectionKey.OP_READ);
   }
@@ -43,18 +73,19 @@ public class NIOServer extends Thread {
   @Override
   public void run(){
     try {
-      setupServer();
+      setupServer(); // setup server
 
       while (!Thread.currentThread().isInterrupted()) {
 
-        this.selector.select();
+        this.selector.select(); // get keys that changes
         Iterator keys = this.selector.selectedKeys().iterator();
+        // Loop through keys
         while (keys.hasNext()) {
 
           SelectionKey key = (SelectionKey) keys.next();
           keys.remove();
 
-          chooseAction(key);
+          chooseAction(key); //choose what to do based on the key
         }
       }
     } catch (IOException e) {
@@ -65,6 +96,11 @@ public class NIOServer extends Thread {
 
   }
 
+  /**
+   * Either accept a connection or setup a task to be read
+   * @param key the key to work on
+   * @throws IOException Error connecting to socket
+   */
   private void chooseAction(SelectionKey key) throws IOException {
     try{
       if (key.isAcceptable ()) {
@@ -76,12 +112,17 @@ public class NIOServer extends Thread {
         threadPool.addTask(newTask);
       }
     } catch (CancelledKeyException e){
+      // If key gets canceled it means the client has disconnected
       System.err.println("A client has disconnected");
 
     }
 
   }
 
+  /**
+   * Sets up the server
+   * @throws IOException Error connecting to server
+   */
   private void setupServer() throws IOException {
     String serverAddress = InetAddress.getLocalHost().getHostAddress();
     selector = Selector.open();
