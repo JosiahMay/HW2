@@ -59,7 +59,6 @@ public class Task implements Runnable{
     while (buffer.hasRemaining() && read != -1) {
       read = channel.read(buffer);
     }
-
     if (read == -1) {
       stats.removeKey(key);
       /* Connection was terminated by the client. */

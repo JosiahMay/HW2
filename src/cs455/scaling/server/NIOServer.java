@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.CancelledKeyException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -22,7 +23,7 @@ public class NIOServer extends Thread {
   private final ThreadPoolController threadPool;
   private final ServerStatisticsThread serverStats;
 
-  public NIOServer(int portNumber, ThreadPoolController threadPool, ServerStatisticsThread serverStats){
+  NIOServer(int portNumber, ThreadPoolController threadPool, ServerStatisticsThread serverStats){
     this.serverPort = portNumber;
     this.threadPool = threadPool;
     this.serverStats = serverStats;
@@ -41,7 +42,6 @@ public class NIOServer extends Thread {
 
   @Override
   public void run(){
-    System.out.println("Starting server");
     try {
       setupServer();
 
@@ -66,14 +66,20 @@ public class NIOServer extends Thread {
   }
 
   private void chooseAction(SelectionKey key) throws IOException {
-    if (key.isAcceptable ()) {
-      this.accept(key);
+    try{
+      if (key.isAcceptable ()) {
+        this.accept(key);
+      }
+
+      if(key.isReadable()){
+        Task newTask = new Task(key, serverStats);
+        threadPool.addTask(newTask);
+      }
+    } catch (CancelledKeyException e){
+      System.err.println("A client has disconnected");
+
     }
 
-    if(key.isReadable()){
-      Task newTask = new Task(key, serverStats);
-      threadPool.addTask(newTask);
-    }
   }
 
   private void setupServer() throws IOException {
@@ -82,7 +88,7 @@ public class NIOServer extends Thread {
     ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
     serverSocketChannel.configureBlocking(false);
     serverSocketChannel.socket().bind(new InetSocketAddress(serverAddress, serverPort));
-    System.out.println("Starting ServerThreadTest");
+    System.out.println("Starting Server at");
     System.out.println(serverAddress + ":" + serverPort);
     serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
   }

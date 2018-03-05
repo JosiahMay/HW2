@@ -9,7 +9,7 @@ public class ServerStatisticsThread extends Thread{
   private final HashMap<SelectionKey, Integer> stats;
 
 
-  public ServerStatisticsThread(){
+  ServerStatisticsThread(){
     this.stats = new HashMap<>();
   }
 
@@ -44,7 +44,7 @@ public class ServerStatisticsThread extends Thread{
     System.out.printf("[%s] Server Throughput: %f messages/s, "
             + "Active Client Connections: %d, "
             + "Mean Perclient Throughput: %f messages/s, "
-            + "Std. Dev. Of Per-client Throughput: %f messages/s",
+            + "Std. Dev. Of Per-client Throughput: %f messages/s\n",
         new java.util.Date().toString(),
         (double)total/ProjectProperties.STATS_WAIT_TIME_SECONDS,
         stats.size(),
