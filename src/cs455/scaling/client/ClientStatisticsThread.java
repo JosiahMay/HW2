@@ -16,7 +16,7 @@ public class ClientStatisticsThread extends Thread{
   /**
    * Basic constructor that sets the counts to zero
    */
-  public ClientStatisticsThread(){
+  ClientStatisticsThread(){
     this.messagesSent = 0;
     this.messagesReceived = 0;
   }
@@ -36,6 +36,9 @@ public class ClientStatisticsThread extends Thread{
     }
   }
 
+  /**
+   * Prints and resets the stats
+   */
   private synchronized void runLogic() {
     printStats();
     resetStats();
@@ -62,14 +65,14 @@ public class ClientStatisticsThread extends Thread{
   /**
    * Adds to the count of messages sent
    */
-  public synchronized void messageSent(){
+  synchronized void messageSent(){
     messagesSent++;
   }
 
   /**
    * Adds to the count of messages received
    */
-  public synchronized void messageReceived(){
+  synchronized void messageReceived(){
     messagesReceived++;
   }
 }

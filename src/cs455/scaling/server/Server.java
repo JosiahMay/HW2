@@ -12,6 +12,11 @@ import cs455.scaling.util.ServerArgs;
 public class Server {
 
 
+  /**
+   * Driver for server
+   * @param args  0 - port number to start on
+   *              1 - thread pool size
+   */
   public static void main(String[] args) {
 
     //Check Args

@@ -47,7 +47,7 @@ public class ClientSendBytes extends Thread{
       ByteBuffer buffer = ByteBuffer.wrap(bytes);
       printBytesSent(bytes);
 
-      controller.sendMessage(bytes); // add to sent message list
+      controller.sentMessage(bytes); // add to sent message list
         channel.write(buffer); // send message
         Thread.sleep(1000/messageRate);//Sleep for the required time
 
@@ -60,12 +60,20 @@ public class ClientSendBytes extends Thread{
     }
   }
 
+  /**
+   * Prints the hash code of the bytes sent
+   * @param bytes the bytes to print
+   */
   private void printBytesSent(byte[] bytes) {
     if(ProjectProperties.DEBUG_FULL) {
       System.out.println("Sending out: " + RandomByteAndHashCode.SHA1FromBytes(bytes));
     }
   }
 
+  /**
+   * Sends an error message
+   * @param e the error message
+   */
   private void errorWhenSendingBytes(IOException e) {
     System.err.println("Error when sending bytes to server");
     if(ProjectProperties.DEBUG_FULL) {e.printStackTrace();}
