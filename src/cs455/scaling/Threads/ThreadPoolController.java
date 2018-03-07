@@ -8,7 +8,7 @@ import cs455.scaling.Containers.SynchronizedQueue;
  * The controller for the thread pool and task queue.
  * After the constructor is called, ThreadPoolController.setupThreadPool() must be called to setup
  * the thread pool. After this call ThreadPoolController.startController() to start processing
- * events. This should be its own thread but this in not allowed by the assignment
+ * events.
  */
 public class ThreadPoolController extends Thread{
 
@@ -145,7 +145,7 @@ public class ThreadPoolController extends Thread{
    * waiting for free worker threads
    * @param workerThreads Thread to add back to the pool
    */
-  public synchronized void returnThreadToPool(WorkerThreads workerThreads) {
+  synchronized void returnThreadToPool(WorkerThreads workerThreads) {
     threadPool.add(workerThreads);
     this.notify(); // Wake up waiting threads
   }

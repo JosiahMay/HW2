@@ -7,7 +7,7 @@ import cs455.scaling.util.ProjectProperties;
  * Prints out the count of messages sent and received by a client every 20 seconds. This count
  * is reset after every print.
  */
-public class ClientStatisticsThread extends Thread{
+class ClientStatisticsThread extends Thread{
 
 
   private int messagesSent;

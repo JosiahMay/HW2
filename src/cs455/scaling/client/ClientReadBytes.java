@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-public class ClientReadBytes extends Thread {
+/**
+ * Reads the returned hash and checks it against the list of sent hash
+ */
+class ClientReadBytes extends Thread {
 
   /**
    * The controller of this thread
