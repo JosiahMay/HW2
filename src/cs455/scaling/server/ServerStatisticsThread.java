@@ -2,7 +2,6 @@ package cs455.scaling.server;
 
 import cs455.scaling.util.ProjectProperties;
 import java.nio.channels.SelectionKey;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

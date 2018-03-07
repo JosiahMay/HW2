@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
+/**
+ * Reads the returned hash and checks it against the list of sent hash
+ */
 class ClientReadBytes extends Thread {
 
   /**

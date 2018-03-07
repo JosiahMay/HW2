@@ -1,7 +1,7 @@
 package cs455.scaling.util;
 
 /**
- * Wrapper class for the args for a client
+ * Wrapper class for the args for a client args
  */
 public class ClientArgs implements ArgsReturned {
 
