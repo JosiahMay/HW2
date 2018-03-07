@@ -7,6 +7,6 @@ public interface ProjectProperties {
   boolean DEBUG_FULL = false;
   int STATS_WAIT_TIME_MILLISECONDS = 20000; // 20sec
   int STATS_WAIT_TIME_SECONDS = 20;
-  boolean DEBUG_HEX_NOT_FOUND = true;
+  boolean DEBUG_HEX_NOT_FOUND = false;
 
 }

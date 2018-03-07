@@ -74,7 +74,6 @@ class NIOServer extends Thread {
       setupServer(); // setup server
 
       while (!Thread.currentThread().isInterrupted()) {
-
         this.selector.select(); // get keys that changes
         Iterator keys = this.selector.selectedKeys().iterator();
         // Loop through keys
