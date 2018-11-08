@@ -1,0 +1,40 @@
+Josiah May
+CS455 HW2 March 7, 2018
+
+COMMANDS:
+  Start Server: java cs455.scaling.server.Server portNum threadPoolSize
+  Start Client: java cs455.scaling.client.Client ServerIP ServerPort MessageRate
+
+CLASSES:
+  TREADS:
+    ThreadPoolController.java:  The controller for the thread pool and task queue.
+                                After the constructor is called, ThreadPoolController.setupThreadPool() must be called to setup
+                                the thread pool. After this call ThreadPoolController.startController() to start processing
+                                events.
+    WorkerThreads.java: A worker thread the receives a task from the thread pool and runs the tasks. When the thread has
+                        no task to run, it waits.
+  client:
+    Client.java:  Driver class for the client
+    ClientStatisticsThread.java: Prints out the count of messages sent and received by a client every 20 seconds. This count is reset after every print.
+    ClientReadBytes.java: Reads the returned hash and checks it against the list of sent hash
+    ClientConnectionController.java:  Connects to the server and starts up the sender and receiver threads for the client
+    ClientSendBytes.java: Sends a random byte[] to a server at a given message rate
+  server:
+    ServerStatisticsThread.java: Statistic thread for the server
+    NIOServer.java: Server that handles the accepting connection and creating tasks
+    Server.java: Driver for the server
+  util:
+    ServerArgs.java:  Wrapper class for the args for starting a server
+    ClientArgs.java:  Wrapper class for the args for a client
+    ProjectProperties.java: Project variables
+    CommandLineParser.java: Parses the commands given to the program from the command line
+    ArgsReturned.java: Interface for all args returned after parsing
+    RandomByteAndHashCode.java: Makes byte[] and converts them to a hash code
+  Task:
+    Task.java:  Reads a byte[] from a socket and writes the hash of the byte[] to the socket
+  Containers:
+    SynchronizedQueue.java:  A custom synchronized queue for uses when java.util.concurrent.SynchronousQueue is not allowed in assignment.
+    SynchronizedSet.java: A custom synchronized set for uses when java.util.concurrent.SynchronousSet is not allowed in assignment.
+
+INFO:
+  Max though put is in the 1400/s
